@@ -1,0 +1,95 @@
+docker -v  เวอร์ชั่น
+docker ps 
+docker ps --all
+docker run hello-world
+docker run busybox echo 'hello world in docker'
+docker run busybox ping google.com
+docker run stop image
+docker pull busybox
+docker create busybox ping google.com
+docker start 558a0bdf85b9
+docker stop 558a0bdf85b9
+docker system prune *** เอาไว้ลบcontainer y ลบหมด
+docker run nginx
+docker exec f3bc94f5c5e0 ls
+docker exec -it f3bc94f5c5e0 sh
+docker exec -it f3bc94f5c5e0 bash
+docker rm f3bc94f5c5e0
+docker run -p 80:80
+docker run -p 8800:80
+docker ps
+docker run -d -p 7800:80 nginx
+docker images
+docker system df
+docker image rm hello-world
+
+---------------------------
+
+image ที่ต้องโหลด
+docker pull wordpress
+docker pull mysql:5.7
+docker pull phpmyadmin/phpmyadmin
+
+สร้าง network
+docker network create wordpress
+docker network ls
+
+
+docker run --name mysql --network wordpress -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress -d mysql:5.7
+docker run --name pma --network wordpress -p 8888:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+docker run -d --name wordpress --network wordpress -p 888:80 -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress_db wordpress
+
+ถ้าเสร็จแล้วรันlocalhost888
+
+show
+docker network inspect wordpress
+
+docker exec -it pma sh
+#apt-get update
+#apt-get install vim
+vi a.text พิมข้อมูลกด i ถ้าออกกด esc และพิม :wq ละกดenter
+
+docker exec -it pma sh
+#apt-get update
+#apt-get install bash
+
+docker volume ls
+docker volume create wp_volume
+docker volume create mysql_volume
+docker volume rm wp_volume mysql_volume // rm ใช้ลบ
+
+docker container inspect wordpress
+
+docker volume create wp_volume
+docker volume create mysql_volume
+docker network create wordpress02
+docker network ls
+docker volume ls
+
+docker run -d --name mysql02 --network wordpress02 -v mysql_volume:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress02_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress mysql:5.7
+docker run -d --name wordpress02 --network wordpress02 -v wp_volume:/var/www/html -e WORDPRESS_DB_HOST=mysql02 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress02_db -p 889:80 wordpress
+docker run --name pma02 --network wordpress02 -p 8889:80 -e PMA_ARBITRARY=1 phpmyadmin/phpmyadmin
+
+25.09.2567
+สร้าง folder wordpress และ สร้างfolder mysql และ wp ข้างใน
+docker network create wordpress03
+
+กดcopy path ของโฟเด้อmysql แล้ววางหลัง -v
+docker run -d --name mysql03 --network wordpress03 -v C:\Users\sanitnb\Desktop\Docker_Bootcamp\wordpress\mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress02_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress mysql:5.7
+
+กดcopy path ของโฟเด้อwp แล้ววางหลัง -v
+docker run -d --name wordpress03 --network wordpress03 -v C:\Users\sanitnb\Desktop\Docker_Bootcamp\wordpress\wp:/var/www/html -e WORDPRESS_DB_HOST=mysql03 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress03_db -p 890:80 wordpress
+
+docker run --name pma03 --network wordpress03 -p 8890:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+ 
+cd .\wordpress\
+docker compose up -d
+docker compose down   
+docker compose up -d
+docker run -d --name mysql03 --network wordpress03 -v C:\Users\User\Desktop\Docker\wordpress\mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress03_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress mysql:5.7
+docker run -d --name wordpress03 --network wordpress03 -v C:\Users\User\Desktop\Docker\wordpress\wp:/var/www/html -e WORDPRESS_DB_HOST=mysql03 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress03_db -p 890:80 wordpress
+
+ดูโค้ดจาร https://github.com/suriyapi/docker101
+
+ดาวน์โหลดไฟล์ที่ https://github.com/suriyapi/docker101/blob/master/docker-compose.yml
+วางในโฟลเด้อwordpress
